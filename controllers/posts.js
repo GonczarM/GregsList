@@ -11,11 +11,11 @@ router.get('/', async (req, res, next) => {
 		// allPosts.sort(function(a,b){
   		// 	return new Date(b.date) - new Date(a.date);
 		// });
-		// res.send(allPosts)
-		res.render('posts/index.ejs', {
-			posts: allPosts,
-			session: req.session
-		})
+		res.send(allPosts)
+		// res.render('posts/index.ejs', {
+		// 	posts: allPosts,
+		// 	session: req.session
+		// })
 	}
 	catch(err){
 		next(err)
@@ -50,19 +50,19 @@ router.get('/meet', (req, res, next) => {
 // ROUTE TO POST NEW POSTS
 router.post('/', async (req, res, next) => { 
 	try {
-		let foundUser
-		if(req.user){
-			console.log('if req.user')
-			foundUser = await User.findById(req.user._id);
-		}else if(req.session){
-			console.log(req.session)
-			foundUser = await User.findById(req.session.userId);
-		}
-		console.log(foundUser)
+		// let foundUser
+		// if(req.user){
+		// 	console.log('if req.user')
+		// 	foundUser = await User.findById(req.user._id);
+		// }else if(req.session){
+		// 	console.log(req.session)
+		// 	foundUser = await User.findById(req.session.userId);
+		// }
+		// console.log(foundUser)
 		const createdPost = await Post.create(req.body);
-		foundUser.posts.push(createdPost);
-		foundUser.save()
-		console.log(foundUser)
+		// foundUser.posts.push(createdPost);
+		// foundUser.save()
+		// console.log(foundUser)
 		// res.redirect('/posts')
 		res.send(createdPost)
 	}
