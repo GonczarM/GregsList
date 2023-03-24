@@ -63,6 +63,7 @@ router.get('/register/:id', (req, res, next) => {
 
 /// create new user from register page ///
 router.post('/register', async (req, res, next) => {
+  console.log(req.body)
   const password = req.body.password;
   const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   req.body.password = passwordHash
@@ -91,8 +92,8 @@ router.post('/register', async (req, res, next) => {
       req.session.loggedIn = true
       req.session.userId = createdUser._id
       req.session.name = req.body.name
-      // res.redirect('/posts/')
-      res.send(createdUser)
+      res.redirect('/posts/')
+      // res.send(createdUser)
     // }
   } catch (err) {
     next(err)
