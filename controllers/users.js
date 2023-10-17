@@ -68,23 +68,23 @@ router.post('/register', async (req, res, next) => {
   const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   req.body.password = passwordHash
   try {
-    // const foundName = await User.findOne({'name': req.body.name});
-    // const foundEmail = await User.findOne({'email': req.body.email});
-    // const foundPhone = await User.findOne({'phone': req.body.phone});
-    // const foundLinkedin = await User.findOne({'linkedin': req.body.linkedin});
-    // if (foundName) {
-    //   req.session.message = "Username already taken."
-    //   res.redirect('/users/register')
-    // }else if(foundEmail) {
-    //   req.session.message = "Email already taken."
-    //   res.redirect('/users/register')
-    // }else if(req.body.phone.length > 0 && foundPhone){
-    //   req.session.message = "Phone Number already taken."
-    //   res.redirect('/users/register')
-    // }else if(req.body.linkedin.length > 0 && foundLinkedin) {
-    //   req.session.message = "linkedIn already taken."
-    //   res.redirect('/users/register')
-    // } else {
+    const foundName = await User.findOne({'name': req.body.name});
+    const foundEmail = await User.findOne({'email': req.body.email});
+    const foundPhone = await User.findOne({'phone': req.body.phone});
+    const foundLinkedin = await User.findOne({'linkedin': req.body.linkedin});
+    if (foundName) {
+      req.session.message = "Username already taken."
+      res.redirect('/users/register')
+    }else if(foundEmail) {
+      req.session.message = "Email already taken."
+      res.redirect('/users/register')
+    }else if(req.body.phone.length > 0 && foundPhone){
+      req.session.message = "Phone Number already taken."
+      res.redirect('/users/register')
+    }else if(req.body.linkedin.length > 0 && foundLinkedin) {
+      req.session.message = "linkedIn already taken."
+      res.redirect('/users/register')
+    } else {
       // create user
       const createdUser = await User.create(req.body)
       // they will be logged in (session)
@@ -93,8 +93,7 @@ router.post('/register', async (req, res, next) => {
       req.session.userId = createdUser._id
       req.session.name = req.body.name
       res.redirect('/posts/')
-      // res.send(createdUser)
-    // }
+    }
   } catch (err) {
     next(err)
   }
@@ -110,8 +109,7 @@ router.post('/login', async (req, res, next) => {
         req.session.loggedIn = true;
         req.session.userId = foundUser._id;
         req.session.name = req.body.name
-        res.send(foundUser)
-        // res.redirect('/posts')
+        res.redirect('/posts')
       } else {
         req.session.message = "Username or Password is incorrect";
         res.redirect('/users/login');
@@ -144,13 +142,12 @@ router.get('/:id', isLoggedIn, async (req, res, next) => {
     console.log(req.params)
     const msg = req.session.message
     req.session.message = ''
-    res.send(foundUser)
-    // res.render('users/show.ejs', {
-    //   foundUser: foundUser,
-    //   posts: foundUser.posts,
-    //   session: req.session,
-    //   message: msg
-    // })
+    res.render('users/show.ejs', {
+      foundUser: foundUser,
+      posts: foundUser.posts,
+      session: req.session,
+      message: msg
+    })
   } catch (err) {
     next(err)
   }
